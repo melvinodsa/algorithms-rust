@@ -1,5 +1,5 @@
 [package]
-name = "Insertion-Sort"
+name = "insertion_sort"
 version = "0.1.0"
 authors = ["melvinodsa <melvinodsa@gmail.com>"]
 
