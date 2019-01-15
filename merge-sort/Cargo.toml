@@ -1,0 +1,6 @@
+[package]
+name = "merge-sort"
+version = "0.1.0"
+authors = ["melvinodsa <melvinodsa@gmail.com>"]
+
+[dependencies]

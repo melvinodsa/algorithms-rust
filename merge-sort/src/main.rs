@@ -1,11 +1,14 @@
 use std::io;
+
+const MAX: usize = 10000;
+const MAXI32: i32 = std::i32::MAX;
+
 fn main() {
-    const MAX: usize = 10000;
     println!("Input the array followed by 'e'");
 
     //variable to store the input array
     let mut arr: [i32; MAX] = [0; MAX];
-    let mut counter: usize = 0; //coutner has the length of the array to be considered
+    let mut counter: usize = 0; //counter has the length of the array to be considered
 
     //building the array
     loop {
@@ -31,36 +34,50 @@ fn main() {
         counter += 1;
     }
 
-    //insertion algorithm
+    //merge sort
     print!("The input sequence is:");
     print_array(&arr[..counter]);
-    insertion_sort(&mut arr[..counter]);
+    merge_sort(&mut arr[..counter], 0, counter - 1);
 
     //printing the sequence
     print!("The sorted sequence is:");
     print_array(&arr[..counter]);
 }
 
-fn insertion_sort(arr: &mut [i32]) {
-    //for rust, only usize is allowed as array size.
-    //But usize cannot be < 0. To overcome that we use int for updation.
-    let mut i_u: usize;
-    let mut i: i32;
-    let mut key: i32;
-    //insertion sort begins
-    for j in 1..arr.len() {
-        key = arr[j];
-        //insert the key into the sequence arr[1..j-1]
-        i_u = j - 1;
-        i = i_u as i32;
-        while i >= 0 && arr[i_u] > key {
-            arr[i_u + 1] = arr[i_u];
-            i -= 1;
-            if i >= 0 {
-                i_u = i as usize;
-            }
+fn merge_sort(arr: &mut [i32], p: usize, r: usize) {
+    //if p >= r then we already have a sorted array
+    if p < r {
+        let q = (p + r) / 2;
+        merge_sort(arr, p, q);
+        merge_sort(arr, q + 1, r);
+        merge_subroutine(arr, p, q, r);
+    }
+}
+
+fn merge_subroutine(arr: &mut [i32], p: usize, q: usize, r: usize) {
+    let n1 = q - p + 1;
+    let n2 = r - q;
+    //variable to store the input array
+    let mut l_arr: [i32; MAX] = [0; MAX];
+    let mut r_arr: [i32; MAX] = [0; MAX];
+    for i in 0..n1 {
+        l_arr[i] = arr[p + i];
+    }
+    for i in 0..n2 {
+        r_arr[i] = arr[q + i + 1];
+    }
+    l_arr[n1] = MAXI32;
+    r_arr[n2] = MAXI32;
+    let mut i: usize = 0;
+    let mut j: usize = 0;
+    for k in p..r + 1 {
+        if l_arr[i] <= r_arr[j] {
+            arr[k] = l_arr[i];
+            i += 1;
+        } else {
+            arr[k] = r_arr[j];
+            j += 1;
         }
-        arr[(i + 1) as usize] = key;
     }
 }
 
